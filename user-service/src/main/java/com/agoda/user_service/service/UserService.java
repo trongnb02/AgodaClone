@@ -81,4 +81,9 @@ public class UserService {
         return userRepository.save(toUpdate);
     }
 
+    public void deleteUserByEmail(String email) {
+        User user = findUserByEmail(email);
+        userRepository.delete(user);
+    }
+
 }

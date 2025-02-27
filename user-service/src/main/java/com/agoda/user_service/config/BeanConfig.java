@@ -1,5 +1,6 @@
 package com.agoda.user_service.config;
 
+import com.agoda.user_service.jwt.JwtAuthenticationFilter;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -23,4 +24,5 @@ public class BeanConfig {
                 .setPropertyCondition(Conditions.isNotNull());
         return modelMapper;
     }
+
 }

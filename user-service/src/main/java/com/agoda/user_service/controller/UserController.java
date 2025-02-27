@@ -1,5 +1,6 @@
 package com.agoda.user_service.controller;
 
+import com.agoda.user_service.dto.request.DeleteUserRequest;
 import com.agoda.user_service.dto.request.RegisterRequest;
 import com.agoda.user_service.dto.request.UpdateUserRequest;
 import com.agoda.user_service.dto.response.ApiResponse;
@@ -13,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/logintest")
     public ResponseEntity<ApiResponse> test() {
         try {
@@ -57,10 +62,22 @@ public class UserController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ADMIN') or @userService.getUserByEmail(#request.email).email == principal")
     public ResponseEntity<ApiResponse> updateUser(@Valid @RequestBody UpdateUserRequest request){
         try {
             return ResponseEntity.ok(new ApiResponse("Success!",modelMapper.map(userService.updateUserByEmail(request), UserDto.class)));
         } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN') or @userService.getUserByEmail(#request.email).email == principal")
+    public ResponseEntity<ApiResponse> deleteUser(@Valid @RequestBody DeleteUserRequest request){
+        try {
+            userService.deleteUserByEmail(request.getEmail());
+            return ResponseEntity.ok(new ApiResponse("Delete User Successfully!", request.getEmail()));
+        } catch (EmailNotFoundException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
         }
     }

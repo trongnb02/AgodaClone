@@ -1,5 +1,7 @@
 package com.agoda.auth_service.config.jwt;
 
+import com.agoda.auth_service.dto.response.UserDto;
+import com.agoda.auth_service.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -36,11 +38,11 @@ public class JwtService {
         return extractClaims(token, Claims::getSubject);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> extraClaims, User userDetails) {
         return Jwts
                 .builder()
                 .claims()

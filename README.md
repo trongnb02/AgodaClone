@@ -74,6 +74,7 @@ POST: localhost:8222/api/v1/user/update
         "profilePicture":"test"
     }
 }
+Authorization: Bearer ...
 
 Response:
 {
@@ -108,3 +109,19 @@ Response:
     "role": "CUSTOMER"
 }
 ```
+
+Delete user:
+```
+DELETE: localhost:8222/api/v1/user/delete
+{
+    "email":"test12345@gmail.com"
+}
+Authorization: Bearer ...
+
+Respone:
+{
+    "message": "Delete User Successfully!",
+    "data": "test12345@gmail.com"
+}
+```
+
