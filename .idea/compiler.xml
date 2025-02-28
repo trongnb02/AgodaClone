@@ -12,6 +12,7 @@
         <module name="user-service" />
         <module name="discovery" />
         <module name="gateway" />
+        <module name="hotel-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -21,6 +22,7 @@
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="hotel-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

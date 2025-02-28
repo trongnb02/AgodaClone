@@ -1,4 +1,4 @@
-package com.agoda.user_service.model;
+package com.agoda.hotel_service.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

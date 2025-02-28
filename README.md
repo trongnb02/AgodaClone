@@ -125,3 +125,157 @@ Respone:
 }
 ```
 
+## Hotel Service
+
+Create new hotel (without rooms):
+```
+POST: localhost:8222/api/v1/hotel/new
+{
+    "name":"hotel name test 3",
+    "address": "hotel address 3",
+    "city": "hotel city test 3",
+    "vendorId": "vendoridtest3",
+    "phone":"0192387761253",
+    "rooms":[]
+}
+
+Response:
+{
+    "message": "Create Hotel Successfully!",
+    "data": {
+        "id": "a036a43c-7a94-4eff-8d4f-b52f4be1f846",
+        "name": "hotel name test 3",
+        "address": "hotel address 3",
+        "city": "hotel city test 3",
+        "phone": "0192387761253",
+        "vendorId": "vendoridtest3",
+        "roomsId": []
+    }
+}
+```
+
+Create new hotel (with new rooms):
+```
+POST: localhost:8222/api/v1/hotel/new
+{
+    "name":"hotel name test 4",
+    "address": "hotel address 4",
+    "city": "hotel city test 4",
+    "vendorId": "vendoridtest4",
+    "phone":"0192387761253",
+    "rooms":[
+        {
+            "roomType": "Type 1",
+            "price": 35,
+            "capacity": 2,
+            "availability": true
+        },
+        {
+            "roomType": "Type 12",
+            "price": 23,
+            "capacity": 4,
+            "availability": true
+        }
+    ]
+}
+
+Response:
+{
+    "message": "Create Hotel Successfully!",
+    "data": {
+        "id": "5951c136-5d38-4fc3-bf36-ae649dcb7a14",
+        "name": "hotel name test 4",
+        "address": "hotel address 4",
+        "city": "hotel city test 4",
+        "phone": "0192387761253",
+        "vendorId": "vendoridtest4",
+        "roomsId": [
+            "4b92efe1-a1f7-4048-aade-92df10d11d68",
+            "6ee57fa4-d178-4b96-8441-25f116aa7bcc"
+        ]
+    }
+}
+```
+
+Get all hotels (FOR ADMIN ONLY):
+```
+GET: localhost:8222/api/v1/hotel/list
+
+Response:
+{
+    "message": "All Hotels",
+    "data": [
+        {
+            "id": "2acaf534-4550-4bfe-8e58-5607bbfcf298",
+            "creationTimestamp": "2025-02-28T13:31:53.113639",
+            "createdBy": null,
+            "updateTimestamp": "2025-02-28T13:31:53.113639",
+            "lastModifiedBy": null,
+            "name": "hotel name test 5",
+            "address": "hotel address 5",
+            "city": "hotel city test 5",
+            "phone": "0192387761253",
+            "vendorId": "vendoridtest5",
+            "rooms": []
+        },
+        {
+            "id": "5951c136-5d38-4fc3-bf36-ae649dcb7a14",
+            "creationTimestamp": "2025-02-28T13:30:49.278884",
+            "createdBy": null,
+            "updateTimestamp": "2025-02-28T13:30:49.278884",
+            "lastModifiedBy": null,
+            "name": "hotel name test 4",
+            "address": "hotel address 4",
+            "city": "hotel city test 4",
+            "phone": "0192387761253",
+            "vendorId": "vendoridtest4",
+            "rooms": [
+                {
+                    "id": "6ee57fa4-d178-4b96-8441-25f116aa7bcc",
+                    "creationTimestamp": "2025-02-28T13:30:49.301821",
+                    "createdBy": null,
+                    "updateTimestamp": "2025-02-28T13:30:49.301821",
+                    "lastModifiedBy": null,
+                    "roomType": "Type 1",
+                    "price": 35.0,
+                    "capacity": 2,
+                    "availability": true
+                },
+                {
+                    "id": "4b92efe1-a1f7-4048-aade-92df10d11d68",
+                    "creationTimestamp": "2025-02-28T13:30:49.308462",
+                    "createdBy": null,
+                    "updateTimestamp": "2025-02-28T13:30:49.308462",
+                    "lastModifiedBy": null,
+                    "roomType": "Type 12",
+                    "price": 23.0,
+                    "capacity": 4,
+                    "availability": true
+                }
+            ]
+        }
+    ]
+}
+```
+
+Get hotel by id:
+```
+GET: localhost:8222/api/v1/hotel/5951c136-5d38-4fc3-bf36-ae649dcb7a14
+
+Response:
+{
+    "message": "Hotel Detail",
+    "data": {
+        "id": "5951c136-5d38-4fc3-bf36-ae649dcb7a14",
+        "name": "hotel name test 4",
+        "address": "hotel address 4",
+        "city": "hotel city test 4",
+        "phone": "0192387761253",
+        "vendorId": "vendoridtest4",
+        "roomsId": [
+            "4b92efe1-a1f7-4048-aade-92df10d11d68",
+            "6ee57fa4-d178-4b96-8441-25f116aa7bcc"
+        ]
+    }
+}
+```
