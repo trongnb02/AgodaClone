@@ -26,6 +26,7 @@ spring:
           uri: http://localhost:8892
           predicates:
             - Path=/api/v1/hotel/**
+            - Path=/api/v1/room/**
 #management:
 #  tracing:
 #    sampling:

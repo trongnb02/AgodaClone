@@ -359,8 +359,5 @@ Delete hotel and all its rooms:
 DELETE: localhost:8892/api/v1/hotel/b128bbd2-a4ec-45ba-a1d7-d2380ecb05aa/delete
 
 Response:
-{
-    "message": "Delete hotel and all its rooms successfully!",
-    "data": null
-}
+
 ```

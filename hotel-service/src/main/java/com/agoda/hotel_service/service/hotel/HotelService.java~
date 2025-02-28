@@ -72,12 +72,6 @@ public class HotelService implements IHotelService{
         return hotelRepository.findAll();
     }
 
-    @Override
-    @Transactional
-    public void deleteHotel(String hotelId) {
-        hotelRepository.deleteById(hotelId);
-    }
-
     @Transactional
     public Hotel updateHotel(String hotelId, CreateRoomRequest request) {
         Hotel hotel = findById(hotelId);

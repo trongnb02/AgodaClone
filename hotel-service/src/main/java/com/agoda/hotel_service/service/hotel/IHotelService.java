@@ -13,4 +13,5 @@ public interface IHotelService {
     Hotel createHotel(CreateHotelRequest request);
     Set<Room> getRoomsById(String id);
     List<Hotel> getAllHotels();
+    void deleteHotel(String hotelId);
 }
