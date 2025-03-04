@@ -1,0 +1,2 @@
+package com.agoda.booking_service.request;public class CreateNewBooking {
+}

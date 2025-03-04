@@ -1,0 +1,20 @@
+server:
+  port: 8893
+spring:
+  application:
+    name: booking-service
+  data:
+    mongodb:
+      username: mongoadmin
+      password: mongopass
+      host: localhost
+      port: 27017
+      database: mongo-booking
+      authentication-database: admin
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

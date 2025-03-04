@@ -1,7 +1,7 @@
 services:
   mysql:
     container_name: mysql
-    image: mysql:latest
+    image: mysql:9.2.0
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_DATABASE: agodaclone
@@ -11,6 +11,7 @@ services:
       - "3306:3306"
     networks:
       - mysql
+      - agoda-clone
     restart: unless-stopped
 
   phpmyadmin:
@@ -24,6 +25,7 @@ services:
       - "8812:80"
     networks:
       - mysql
+      - agoda-clone
     restart: unless-stopped
 
   zipkin:
@@ -34,10 +36,44 @@ services:
     networks:
       - zipkin
 
+  mongodb-booking:
+    container_name: mongodb-booking
+    image: mongo:8.0.5
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: mongopass
+      MONGO_INITDB_DATABASE: mongo-booking
+    networks:
+      - mongo
+      - agoda-clone
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    ports:
+      - "8813:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb-booking
+      ME_CONFIG_MONGODB_ADMINUSERNAME: mongoadmin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongopass
+      ME_CONFIG_BASICAUTH_USERNAME: mongoadmin
+      ME_CONFIG_BASICAUTH_PASSWORD: mongopass
+    depends_on:
+      - mongodb-booking
+    networks:
+      - mongo
+      - agoda-clone
+
 networks:
   mysql:
     driver: bridge
   zipkin:
+    driver: bridge
+  mongo:
+    driver: bridge
+  agoda-clone:
     driver: bridge
 
 volumes:
