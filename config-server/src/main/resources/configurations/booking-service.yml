@@ -11,6 +11,18 @@ spring:
       port: 27017
       database: mongo-booking
       authentication-database: admin
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            add-type-info: false
+    topic:
+      name: booking_topics
+
 
 eureka:
   instance:
@@ -18,3 +30,5 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+

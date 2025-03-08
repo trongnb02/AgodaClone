@@ -8,11 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="base-domains" />
         <module name="auth-service" />
         <module name="discovery" />
         <module name="booking-service" />
         <module name="user-service" />
         <module name="gateway" />
+        <module name="notification-service" />
         <module name="hotel-service" />
       </profile>
     </annotationProcessing>
@@ -20,11 +22,13 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-service" options="-parameters" />
+      <module name="base-domains" options="-parameters" />
       <module name="booking-service" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="hotel-service" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

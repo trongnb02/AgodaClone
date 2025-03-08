@@ -1,16 +1,16 @@
 package com.agoda.booking_service.mapper;
 
+import com.agoda.base_domains.dto.HotelDto;
+import com.agoda.base_domains.dto.RoomDto;
+import com.agoda.base_domains.event.BookingEvent;
 import com.agoda.booking_service.dto.BookingDto;
 import com.agoda.booking_service.model.Booking;
-import com.agoda.booking_service.service.IBookingService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class BookingMapper {
-
-    private final IBookingService bookingService;
 
     public BookingDto mapToDto(Booking booking) {
         return BookingDto.builder()
@@ -23,6 +23,23 @@ public class BookingMapper {
                 .roomId(booking.getRoomId())
                 .email(booking.getEmail())
                 .build();
+    }
+
+    public BookingEvent mapToBookingEvent(Booking booking, HotelDto hotelDto, RoomDto roomDto) {
+        return new BookingEvent(
+                "PENDING",
+                "Booking status is in pending state",
+                com.agoda.base_domains.model.Booking.builder()
+                        .id(booking.getId())
+                        .checkInDate(booking.getCheckInDate())
+                        .checkOutDate(booking.getCheckOutDate())
+                        .numOfAdults(booking.getNumOfAdults())
+                        .numOfChildren(booking.getNumOfChildren())
+                        .hotelDto(hotelDto)
+                        .roomDto(roomDto)
+                        .email(booking.getEmail())
+                        .build()
+        );
     }
 
 }

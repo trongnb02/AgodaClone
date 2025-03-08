@@ -1,7 +1,9 @@
 package com.agoda.booking_service.controller;
 
-import com.agoda.booking_service.exception.ResourceNotFoundException;
+import com.agoda.base_domains.event.BookingEvent;
+import com.agoda.booking_service.kafka.BookingProducer;
 import com.agoda.booking_service.mapper.BookingMapper;
+import com.agoda.booking_service.model.Booking;
 import com.agoda.booking_service.request.CreateNewBooking;
 import com.agoda.booking_service.request.UpdateBooking;
 import com.agoda.booking_service.response.ApiResponse;
@@ -19,6 +21,7 @@ public class BookingController {
 
     private final IBookingService bookingService;
     private final BookingMapper bookingMapper;
+    private final BookingProducer bookingProducer;
 
     @GetMapping("/detail/{bookingId}")
     public ResponseEntity<ApiResponse> getBookingById(@PathVariable String bookingId) {
@@ -59,4 +62,5 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
 }

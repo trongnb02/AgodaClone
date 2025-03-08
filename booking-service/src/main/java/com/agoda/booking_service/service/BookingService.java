@@ -1,18 +1,23 @@
 package com.agoda.booking_service.service;
 
-import com.agoda.booking_service.dto.BookingDto;
+import com.agoda.base_domains.dto.HotelDto;
+import com.agoda.base_domains.dto.RoomDto;
+import com.agoda.booking_service.client.HotelServiceClient;
 import com.agoda.booking_service.exception.ResourceNotFoundException;
+import com.agoda.booking_service.kafka.BookingProducer;
+import com.agoda.booking_service.mapper.BookingMapper;
 import com.agoda.booking_service.model.Booking;
 import com.agoda.booking_service.repository.BookingRepository;
 import com.agoda.booking_service.request.CreateNewBooking;
 import com.agoda.booking_service.request.UpdateBooking;
+import com.agoda.booking_service.response.ApiResponse;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +25,9 @@ public class BookingService implements IBookingService {
 
     private final BookingRepository bookingRepository;
     private final ModelMapper modelMapper;
+    private final BookingProducer bookingProducer;
+    private final BookingMapper bookingMapper;
+    private final HotelServiceClient hotelServiceClient;
 
     @Override
     public Booking findById(String id) {
@@ -27,8 +35,11 @@ public class BookingService implements IBookingService {
     }
 
     @Override
+    @Transactional
     public Booking createNewBooking(CreateNewBooking request){
-        return bookingRepository.save(Booking.builder()
+        HotelDto hotelDto = getHotelById(request.getHotelId());
+        RoomDto roomDto = getRoomFromFeignClient(request.getHotelId(), request.getRoomId());
+        Booking newBooking= bookingRepository.save(Booking.builder()
                 .checkInDate(request.getCheckInDate())
                 .checkOutDate(request.getCheckOutDate())
                 .numOfAdults(request.getNumOfAdults())
@@ -36,8 +47,12 @@ public class BookingService implements IBookingService {
                 .hotelId(request.getHotelId())
                 .roomId(request.getRoomId())
                 .email(request.getEmail())
+                .bookingConfirmationCode(new Random().nextInt(1000000) + "")
                 .build()
         );
+
+        bookingProducer.sendMessage(bookingMapper.mapToBookingEvent(newBooking, hotelDto, roomDto));
+        return newBooking;
     }
 
     @Override
@@ -51,6 +66,28 @@ public class BookingService implements IBookingService {
     @Override
     public void deleteBooking(String bookingId) {
          bookingRepository.delete(findById(bookingId));
+    }
+
+    private HotelDto getHotelById(String hotelId) {
+        ResponseEntity<ApiResponse> responseEntity = hotelServiceClient.getHotelDetail(hotelId);
+        HotelDto hotelDto ;
+        if (responseEntity != null && responseEntity.getBody() != null && responseEntity.getBody().getData() != null && responseEntity.getStatusCode().is2xxSuccessful()) {
+            hotelDto = modelMapper.map(responseEntity.getBody().getData(), HotelDto.class);
+        } else {
+            throw new ResourceNotFoundException("Hotel Not Found");
+        }
+        return hotelDto;
+    }
+
+    private RoomDto getRoomFromFeignClient(String hotelId, String roomId) {
+        ResponseEntity<ApiResponse> responseEntity = hotelServiceClient.getRoomById(hotelId, roomId);
+        RoomDto roomDto ;
+        if (responseEntity != null && responseEntity.getBody() != null && responseEntity.getBody().getData() != null && responseEntity.getStatusCode().is2xxSuccessful()) {
+            roomDto = modelMapper.map(responseEntity.getBody().getData(), RoomDto.class);
+        } else {
+            throw new ResourceNotFoundException("Room Not Found");
+        }
+        return roomDto;
     }
 
 

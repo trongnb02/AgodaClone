@@ -40,7 +40,7 @@ public class HotelController {
         }
     }
 
-    @PostMapping("/{hotelId}/detail")
+    @GetMapping("/{hotelId}/detail")
     public ResponseEntity<ApiResponse> getHotelDetail(@PathVariable String hotelId) {
         try {
             return ResponseEntity.ok(new ApiResponse("Hotel Detail", hotelMapper.mapToDto(hotelService.findById(hotelId))));
