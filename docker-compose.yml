@@ -116,6 +116,18 @@ services:
       - kafka
       - agoda-clone
 
+  redis-authservice:
+    image: redis:7.4.2
+    container_name: redis-authservice
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass R3d1s_4uth_S3rv1c3
+    environment:
+      - REDIS_PASSWORD=R3d1s_4uth_S3rv1c3
+    networks:
+      - agoda-clone
+      - redis
+    restart: unless-stopped
 
 networks:
   mysql:
@@ -127,6 +139,8 @@ networks:
   agoda-clone:
     driver: bridge
   kafka:
+    driver: bridge
+  redis:
     driver: bridge
 
 volumes:

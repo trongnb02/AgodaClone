@@ -1,0 +1,35 @@
+package com.agoda.auth_service.config;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+
+@Configuration
+@EnableRedisRepositories
+public class RedisConfig {
+
+    @Value("${spring.data.redis.password}")
+    private String password;
+
+    @Bean
+    public JedisConnectionFactory redisConnection(){
+        RedisStandaloneConfiguration redis = new RedisStandaloneConfiguration();
+        redis.setHostName("localhost");
+        redis.setPassword(password);
+        redis.setPort(6379);
+        redis.setDatabase(2);
+        return new JedisConnectionFactory(redis);
+    }
+
+    @Bean
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory redisConnection){
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(redisConnection);
+        return template;
+    }
+}

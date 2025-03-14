@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtResponse {
-    private String token;
+    private String access_token;
+    private String refresh_token;
 }

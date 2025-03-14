@@ -48,7 +48,7 @@ public class JwtService {
             newClaims.put("token_type", "access_token");
 
             return Jwts.builder()
-                    .id(claims.getId())
+                    .id(UUID.randomUUID().toString())
                     .claims(newClaims)
                     .subject(claims.getSubject())
                     .issuer(claims.getIssuer())

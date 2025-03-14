@@ -38,13 +38,25 @@ public class AuthController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<?> validate(@RequestBody ValidateToken token) {
+    public ResponseEntity<?> validate(@RequestBody ValidateToken request) {
         try {
-            return ResponseEntity.ok(new ApiResponse("Successfully validated", authService.checkToken(token.getToken())));
+            if (!authService.checkToken(request.getToken())){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse("Token is not valid", null));
+            }
+            return ResponseEntity.ok(new ApiResponse("Successfully validated", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
         }
+    }
 
+    @GetMapping("/logout")
+    public ResponseEntity<ApiResponse> logout(@RequestParam("accessToken") String accessToken) {
+        try {
+            authService.logout(accessToken);
+            return ResponseEntity.ok(new ApiResponse("Logout Success!", null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
+        }
     }
 
 }

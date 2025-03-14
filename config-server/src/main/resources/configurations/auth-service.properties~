@@ -11,8 +11,8 @@ spring.jpa.hibernate.ddl-auto=update
 
 spring.data.redis.database=0
 spring.data.redis.host=localhost
-spring.data.redis.port=6379
-spring.data.redis.password=R3d1s_4uth_S3rv1c3
+spring.data.redis.port=16379
+spring.data.redis.password=mypass
 spring.data.redis.timeout=60000
 
 eureka.instance.hostname=localhost
