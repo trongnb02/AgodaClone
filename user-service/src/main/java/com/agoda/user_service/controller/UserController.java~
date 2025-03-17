@@ -5,12 +5,16 @@ import com.agoda.user_service.dto.request.RegisterRequest;
 import com.agoda.user_service.dto.request.UpdateUserRequest;
 import com.agoda.user_service.dto.response.ApiResponse;
 import com.agoda.user_service.dto.response.UserDto;
+import com.agoda.user_service.exception.AlreadyExistsException;
+import com.agoda.user_service.exception.EmailNotFoundException;
 import com.agoda.user_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

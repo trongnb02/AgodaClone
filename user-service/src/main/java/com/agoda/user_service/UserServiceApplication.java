@@ -32,9 +32,8 @@ public class UserServiceApplication implements CommandLineRunner {
 		User user = new User();
 		user.setEmail("admin@gmail.com");
 		user.setPassword(passwordEncoder.encode("Admin123"));
-		user.setUsername("admin");
 		user.setRole(Role.ADMIN);
 		user.setActive(Active.ACTIVE);
-		if (userRepository.findByUsername("admin").isEmpty()) userRepository.save(user);
+		if (!userRepository.existsByEmail("admin@gmail.com")) userRepository.save(user);
 	}
 }

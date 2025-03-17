@@ -1,0 +1,64 @@
+package com.agoda.auth_service.client;
+
+import com.agoda.auth_service.exception.UserServiceException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.Response;
+import feign.codec.ErrorDecoder;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+
+@Slf4j
+public class CustomFeignDecoder implements ErrorDecoder {
+    @Override
+    public Exception decode(String s, Response response) {
+        UserServiceException ex = formatUserServiceException(response);
+        switch (response.status()) {
+            case 400 -> {
+                log.error("Error in request through feign client {}" , ex.getMessage()
+                        + "-" + ex.getCode());
+                return ex;
+            }
+            case 401 -> {
+                log.error("Unauthorized Request through feign");
+                return new Exception("Unauthorized Request through feign");
+            }
+            case 404 -> {
+                log.error("Unidentified Request through feign");
+                return new Exception("Unidentified Request through feign");
+            }
+            default -> {
+                log.error("Error in request through feign client ");
+                return new Exception("Error in request through feign client");
+            }
+        }
+    }
+
+    private UserServiceException formatUserServiceException(Response response) {
+        UserServiceException ex = null;
+        Reader reader = null;
+        try {
+            ObjectMapper objectMapper = new ObjectMapper().disable(
+                    DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+            );
+            reader = response.body().asReader(StandardCharsets.UTF_8);
+            String result = IOUtils.toString(reader);
+            ex = objectMapper.readValue(result, UserServiceException.class);
+        } catch (IOException e) {
+            log.error("IO Exception on reading exception message in feign client", e);
+        } finally {
+            try {
+                if(reader != null) {
+                    reader.close();
+                }
+            }catch (IOException e) {
+                log.error("IO Exception on reading exception message in feign client");
+            }
+        }
+        return ex;
+    }
+}

@@ -21,8 +21,11 @@ public class JwtService {
 
     private String secretkey = "";
 
-    @Value("${auth.token.expirationInMils}")
-    private int expirationTime;
+    @Value("${auth.accessToken.expirationInMils}")
+    private int expirationTimeAccessToken;
+
+    @Value("${auth.refreshToken.expirationInMils}")
+    private int expirationTimeRefreshToken;
 
     public JwtService() {
 
@@ -54,7 +57,7 @@ public class JwtService {
                     .issuer(claims.getIssuer())
                     .signWith(getKey())
                     .issuedAt(new Date())
-                    .expiration(new Date((new Date()).getTime() +expirationTime))
+                    .expiration(new Date((new Date()).getTime() +expirationTimeAccessToken))
                     .compact();
 
         } catch(JwtException e){
@@ -82,7 +85,7 @@ public class JwtService {
                     .issuer(userDetails.getAuthorities().iterator().next().getAuthority())
                     .signWith(getKey())
                     .issuedAt(new Date())
-                    .expiration(new Date((new Date()).getTime() +expirationTime))
+                    .expiration(new Date((new Date()).getTime() + expirationTimeRefreshToken))
                     .compact();
         } catch (JwtException e){
             throw new JwtException(e.getMessage());

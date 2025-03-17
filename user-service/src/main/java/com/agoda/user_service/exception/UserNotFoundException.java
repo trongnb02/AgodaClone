@@ -1,7 +1,9 @@
 package com.agoda.user_service.exception;
 
-public class UserNotFoundException extends RuntimeException{
+import com.agoda.base_domains.exception.ErrorCode;
+
+public class UserNotFoundException extends UserServiceException{
     public UserNotFoundException(String message) {
-        super(message);
+        super(message, ErrorCode.USER_NOT_FOUND);
     }
 }

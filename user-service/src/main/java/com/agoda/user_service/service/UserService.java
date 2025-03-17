@@ -5,7 +5,6 @@ import com.agoda.user_service.dto.request.UpdateUserRequest;
 import com.agoda.user_service.exception.AlreadyExistsException;
 import com.agoda.user_service.exception.EmailNotFoundException;
 import com.agoda.user_service.exception.UserNotFoundException;
-import com.agoda.user_service.exception.UsernameNotFoundException;
 import com.agoda.user_service.model.User;
 import com.agoda.user_service.model.UserDetails;
 import com.agoda.user_service.model.enums.Active;
@@ -32,26 +31,20 @@ public class UserService {
                     User user = new User();
                     user.setEmail(request.getEmail());
                     user.setPassword(passwordEncoder.encode(request.getPassword()));
-                    user.setUsername(request.getUsername());
                     user.setRole(Role.CUSTOMER);
                     user.setActive(Active.ACTIVE);
                     return  userRepository.save(user);
-                }) .orElseThrow(() -> new AlreadyExistsException("Oops!" +request.getEmail() +" already exists!"));
+                }) .orElseThrow(() -> new AlreadyExistsException("Oops! user already exists!"));
     }
 
     protected User findUserById(String id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Username not found!"));
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
     }
 
     protected User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new EmailNotFoundException("User not found"));
-    }
-
-    protected User findUserByUsername(String id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found!"));
+                .orElseThrow(() -> new EmailNotFoundException("User not found!"));
     }
 
     public User getUserById(String id) {
@@ -60,10 +53,6 @@ public class UserService {
 
     public User getUserByEmail(String email) {
         return findUserByEmail(email);
-    }
-
-    public User getUserByUsername(String username) {
-        return findUserByUsername(username);
     }
 
     private UserDetails updateUserDetails(UserDetails toUpdate, UserDetails request) {

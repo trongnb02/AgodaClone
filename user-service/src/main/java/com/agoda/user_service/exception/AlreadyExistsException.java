@@ -1,7 +1,9 @@
 package com.agoda.user_service.exception;
 
-public class AlreadyExistsException extends RuntimeException{
+import com.agoda.base_domains.exception.ErrorCode;
+
+public class AlreadyExistsException extends UserServiceException{
     public AlreadyExistsException(String message) {
-        super(message);
+        super(message, ErrorCode.ALREADY_EXISTS);
     }
 }

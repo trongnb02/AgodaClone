@@ -1,7 +1,6 @@
 package com.agoda.auth_service.model;
 
 import com.agoda.auth_service.dto.response.UserDto;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
