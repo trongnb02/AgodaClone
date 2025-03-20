@@ -1,6 +1,6 @@
-package com.agoda.auth_service.client;
+package com.agoda.notification_service.client;
 
-import com.agoda.auth_service.dto.response.ApiResponse;
+import com.agoda.notification_service.dto.response.ApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

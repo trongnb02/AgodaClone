@@ -1,6 +1,6 @@
-package com.agoda.auth_service.client;
+package com.agoda.notification_service.client;
 
-import com.agoda.auth_service.exception.UserServiceException;
+import com.agoda.notification_service.exception.UserServiceException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 public class CustomFeignDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
+        log.info("methodKey: {}", methodKey);
         if (methodKey.contains("UserServiceClient")) {
             return handleUserServiceError(response);
         }else {

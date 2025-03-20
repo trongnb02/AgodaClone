@@ -22,6 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String gmail) throws UsernameNotFoundException {
+
         ResponseEntity<ApiResponse> responseEntity = userServiceClient.getUserByEmail(gmail);
         UserDto user = modelMapper.map(responseEntity.getBody().getData(), UserDto.class);
         return new User(user);

@@ -1,4 +1,4 @@
-package com.agoda.auth_service.exception;
+package com.agoda.notification_service.exception;
 
 import com.agoda.base_domains.exception.ErrorCode;
 import com.agoda.base_domains.exception.ErrorResponse;
@@ -27,7 +27,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserServiceException.class)
-    protected ResponseEntity<ErrorResponse> handleAddressServiceException(UserServiceException ex) {
+    protected ResponseEntity<ErrorResponse> handleUserServiceException(UserServiceException ex) {
+        return ResponseEntity.badRequest()
+                .body(ErrorResponse.builder()
+                        .code(ex.getCode())
+                        .message(ex.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(NotificationServiceException.class)
+    protected ResponseEntity<ErrorResponse> handleNotificationServiceException(NotificationServiceException ex) {
         return ResponseEntity.badRequest()
                 .body(ErrorResponse.builder()
                         .code(ex.getCode())
@@ -39,8 +48,8 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleException(Exception ex) {
         return ResponseEntity.badRequest()
                 .body(ErrorResponse.builder()
-                        .code(ErrorCode.INTERNAL_SERVER_ERROR_AUTH_SERVICE)
-                        .message("Exception in auth Service" + ex)
+                        .code(ErrorCode.INTERNAL_SERVER_ERROR_NOTIFICATION_SERVICE)
+                        .message("Exception in Notification Service: " + ex)
                         .build());
     }
 

@@ -1,7 +1,6 @@
 package com.agoda.notification_service.service;
 
-import com.agoda.notification_service.dto.EmailRequest;
-import lombok.AllArgsConstructor;
+import com.agoda.notification_service.dto.request.EmailRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

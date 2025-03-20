@@ -49,6 +49,19 @@ services:
       - mongo
       - agoda-clone
 
+  mongodb-notification:
+    container_name: mongodb-notification
+    image: mongo:8.0.5
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: mongopass
+      MONGO_INITDB_DATABASE: mongo-notification
+    networks:
+      - mongo
+      - agoda-clone
+
   mongo-express:
     container_name: mongo-express
     image: mongo-express

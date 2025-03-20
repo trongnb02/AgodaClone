@@ -41,7 +41,13 @@ public class AuthController {
 
     @PostMapping("/validate")
     public ResponseEntity<?> validate(@RequestBody ValidateToken request) {
-        authService.checkToken(request.getToken());
+        //try{
+            authService.checkToken(request.getToken());
+        //}
+        //catch (JwtException ex) {
+        //    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse("Token is not valid", null));
+        //}
+
         return ResponseEntity.ok(new ApiResponse("Successfully validated", null));
 
     }

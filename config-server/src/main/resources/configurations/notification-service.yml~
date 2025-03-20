@@ -3,6 +3,14 @@ server:
 spring:
   application:
     name: notification-service
+  data:
+    mongodb:
+      username: mongoadmin
+      password: mongopass
+      host: localhost
+      port: 27018
+      database: mongo-booking
+      authentication-database: admin
   mail:
     host: smtp.gmail.com
     port: 465
@@ -19,7 +27,6 @@ spring:
       bootstrap-servers: localhost:9092
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-#      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       group-id: group_id
       auto-offset-reset: earliest
       properties:

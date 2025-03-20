@@ -1,11 +1,12 @@
 package com.agoda.notification_service.kafka;
 
 import com.agoda.base_domains.event.BookingEvent;
-import com.agoda.notification_service.dto.EmailRequest;
+import com.agoda.notification_service.dto.request.EmailRequest;
+import com.agoda.notification_service.dto.request.NotificationRequest;
 import com.agoda.notification_service.service.EmailSenderService;
+import com.agoda.notification_service.service.NotificationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -17,22 +18,27 @@ public class BookingConsumer {
 
     @Autowired
     private EmailSenderService emailSenderService;
+    private NotificationService notificationService;
 
     @KafkaListener(topics = "${spring.kafka.topic.name}", groupId = "${spring.kafka.consumer.group-id}")
     public void consume(BookingEvent bookingEvent) {
         log.info("Received booking event: " + bookingEvent);
 
+        String title = "[AGODA-CLONE] Your Booking Details [ID: " + bookingEvent.getBooking().getId() + "]";
+        String content = generateContent(bookingEvent);
+        String email = bookingEvent.getBooking().getEmail();
 
         emailSenderService.sendEmail(
-                new EmailRequest(
-                        bookingEvent.getBooking().getEmail(),
-                        "[AGODA-CLONE] Your Booking Details [ID: " + bookingEvent.getBooking().getId() + "]",
-                        generateEmailContent(bookingEvent)
-                )
+                new EmailRequest(email, title, content)
         );
+
+        notificationService.createOwnerSpecificNotification(
+                new NotificationRequest(email, title, generateContent(bookingEvent))
+        );
+
     }
 
-    public String generateEmailContent(BookingEvent bookingEvent) {
+    public String generateContent(BookingEvent bookingEvent) {
         String text = """
                 Dear %s, \s
                 Your hotel booking has been successfully created. Below are the details: \s

@@ -1,4 +1,4 @@
-package com.agoda.notification_service.response;
+package com.agoda.auth_service.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

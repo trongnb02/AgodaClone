@@ -2,6 +2,7 @@ package com.agoda.auth_service.exception;
 
 import com.agoda.base_domains.exception.ErrorCode;
 import com.agoda.base_domains.exception.ErrorResponse;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,6 +16,15 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(UserServiceException.class)
+    protected ResponseEntity<ErrorResponse> handleUserServiceException(UserServiceException ex) {
+        return ResponseEntity.badRequest()
+                .body(ErrorResponse.builder()
+                        .code(ex.getCode())
+                        .message(ex.getMessage())
+                        .build());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(
             MethodArgumentNotValidException ex) {
@@ -26,12 +36,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errors);
     }
 
-    @ExceptionHandler(UserServiceException.class)
-    protected ResponseEntity<ErrorResponse> handleAddressServiceException(UserServiceException ex) {
+    @ExceptionHandler(AuthServiceException.class)
+    protected ResponseEntity<ErrorResponse> handleAuthServiceException(AuthServiceException ex) {
         return ResponseEntity.badRequest()
                 .body(ErrorResponse.builder()
                         .code(ex.getCode())
                         .message(ex.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler(JwtException.class)
+    protected ResponseEntity<ErrorResponse> handleJwtException(JwtException ex) {
+        return ResponseEntity.badRequest()
+                .body(ErrorResponse.builder()
+                        .code(ErrorCode.INVALID_TOKEN)
+                        .message("Token is not valid")
                         .build());
     }
 
