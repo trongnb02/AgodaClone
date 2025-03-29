@@ -33,68 +33,40 @@ public class HotelController {
 
     @PostMapping("/new")
     public ResponseEntity<ApiResponse> createHotel(@Valid @RequestBody CreateHotelRequest request) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("Create Hotel Successfully!", hotelMapper.mapToDto(hotelService.createHotel(request))));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("Create Hotel Successfully!", hotelMapper.mapToDto(hotelService.createHotel(request))));
     }
 
     @GetMapping("/{hotelId}/detail")
     public ResponseEntity<ApiResponse> getHotelDetail(@PathVariable String hotelId) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("Hotel Detail", hotelMapper.mapToDto(hotelService.findById(hotelId))));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("Hotel Detail", hotelMapper.mapToDto(hotelService.findById(hotelId))));
     }
 
     @GetMapping("/list")
     public ResponseEntity<ApiResponse> getAllHotels() {
-        try {
-            return ResponseEntity.ok(new ApiResponse("All Hotels", hotelService.getAllHotels()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("All Hotels", hotelService.getAllHotels()));
     }
 
     @PostMapping("/{hotelid}/addroom")
     public ResponseEntity<ApiResponse> addRoomToHotel(@PathVariable String hotelid, @Valid @RequestBody CreateRoomRequest request) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("Add new room to hotel successfully!",
-                    hotelMapper.mapToDto(hotelService.updateHotel(hotelid, request))));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("Add new room to hotel successfully!",
+                hotelMapper.mapToDto(hotelService.updateHotel(hotelid, request))));
     }
 
     @GetMapping("/{hotelId}/detail/{roomId}")
     public ResponseEntity<ApiResponse> getRoomById(@PathVariable String roomId) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("Room Detail", roomMapper.mapToDto(roomService.findById(roomId))));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("Room Detail", roomMapper.mapToDto(roomService.findById(roomId))));
     }
 
     @GetMapping("/{hotelId}/roomlist")
     public ResponseEntity<ApiResponse> getAllRoomsOfHotel(@PathVariable String hotelId) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("List Room Of Hotel",
-                    hotelService.getRoomsById(hotelId).stream().map(roomMapper::mapToDto).collect(Collectors.toList())));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("List Room Of Hotel",
+                hotelService.getRoomsById(hotelId).stream().map(roomMapper::mapToDto).collect(Collectors.toList())));
     }
 
     @DeleteMapping("/{hotelId}/delete")
     public ResponseEntity<ApiResponse> deleteHotel(@PathVariable String hotelId) {
-        try {
-            hotelService.deleteHotel(hotelId);
-            return ResponseEntity.ok(new ApiResponse("Delete hotel and all its rooms successfully!", null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        hotelService.deleteHotel(hotelId);
+        return ResponseEntity.ok(new ApiResponse("Delete hotel and all its rooms successfully!", null));
     }
 
 }

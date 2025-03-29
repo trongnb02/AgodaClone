@@ -9,7 +9,7 @@ spring:
       password: mongopass
       host: localhost
       port: 27018
-      database: mongo-booking
+      database: mongo-notification
       authentication-database: admin
   mail:
     host: smtp.gmail.com

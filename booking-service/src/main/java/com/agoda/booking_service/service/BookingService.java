@@ -71,22 +71,14 @@ public class BookingService implements IBookingService {
     private HotelDto getHotelById(String hotelId) {
         ResponseEntity<ApiResponse> responseEntity = hotelServiceClient.getHotelDetail(hotelId);
         HotelDto hotelDto ;
-        if (responseEntity != null && responseEntity.getBody() != null && responseEntity.getBody().getData() != null && responseEntity.getStatusCode().is2xxSuccessful()) {
-            hotelDto = modelMapper.map(responseEntity.getBody().getData(), HotelDto.class);
-        } else {
-            throw new ResourceNotFoundException("Hotel Not Found");
-        }
+        hotelDto = modelMapper.map(responseEntity.getBody().getData(), HotelDto.class);
         return hotelDto;
     }
 
     private RoomDto getRoomFromFeignClient(String hotelId, String roomId) {
         ResponseEntity<ApiResponse> responseEntity = hotelServiceClient.getRoomById(hotelId, roomId);
         RoomDto roomDto ;
-        if (responseEntity != null && responseEntity.getBody() != null && responseEntity.getBody().getData() != null && responseEntity.getStatusCode().is2xxSuccessful()) {
-            roomDto = modelMapper.map(responseEntity.getBody().getData(), RoomDto.class);
-        } else {
-            throw new ResourceNotFoundException("Room Not Found");
-        }
+        roomDto = modelMapper.map(responseEntity.getBody().getData(), RoomDto.class);
         return roomDto;
     }
 

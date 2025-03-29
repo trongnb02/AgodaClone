@@ -1,7 +1,9 @@
 package com.agoda.hotel_service.exception;
 
-public class ResourceNotFoundException extends RuntimeException {
+import com.agoda.base_domains.exception.ErrorCode;
+
+public class ResourceNotFoundException extends HotelServiceException {
     public ResourceNotFoundException(String message) {
-        super(message);
+        super(message, ErrorCode.HOTEL_SERVICE_RESOURCE_NOT_FOUND);
     }
 }

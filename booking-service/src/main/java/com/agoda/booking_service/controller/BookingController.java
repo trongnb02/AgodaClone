@@ -25,42 +25,26 @@ public class BookingController {
 
     @GetMapping("/detail/{bookingId}")
     public ResponseEntity<ApiResponse> getBookingById(@PathVariable String bookingId) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("Booking detail",
+        return ResponseEntity.ok(new ApiResponse("Booking detail",
                     bookingMapper.mapToDto(bookingService.findById(bookingId))));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
     }
 
     @PostMapping("/new")
     public ResponseEntity<ApiResponse> createBooking(@Valid @RequestBody CreateNewBooking request) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("Create new booking successfully!",
-                    bookingMapper.mapToDto(bookingService.createNewBooking(request))));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("Create new booking successfully!",
+                bookingMapper.mapToDto(bookingService.createNewBooking(request))));
     }
 
     @PutMapping("/update")
     public ResponseEntity<ApiResponse> updateBooking(@Valid @RequestBody UpdateBooking request) {
-        try {
-            return ResponseEntity.ok(new ApiResponse("Update booking successfully!",
-                    bookingMapper.mapToDto(bookingService.updateBooking(request))));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        return ResponseEntity.ok(new ApiResponse("Update booking successfully!",
+                bookingMapper.mapToDto(bookingService.updateBooking(request))));
     }
 
     @DeleteMapping("/delete/{bookingId}")
     public ResponseEntity<ApiResponse> deleteBooking(@PathVariable String bookingId) {
-        try {
-            bookingService.deleteBooking(bookingId);
-            return ResponseEntity.ok(new ApiResponse("Delete booking successfully!", null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
-        }
+        bookingService.deleteBooking(bookingId);
+        return ResponseEntity.ok(new ApiResponse("Delete booking successfully!", null));
     }
 
 }
