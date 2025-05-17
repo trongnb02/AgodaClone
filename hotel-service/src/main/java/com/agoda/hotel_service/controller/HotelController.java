@@ -49,7 +49,7 @@ public class HotelController {
     @PostMapping("/{hotelid}/addroom")
     public ResponseEntity<ApiResponse> addRoomToHotel(@PathVariable String hotelid, @Valid @RequestBody CreateRoomRequest request) {
         return ResponseEntity.ok(new ApiResponse("Add new room to hotel successfully!",
-                hotelMapper.mapToDto(hotelService.updateHotel(hotelid, request))));
+                hotelMapper.mapToDto(hotelService.addRoomToHotel(hotelid, request))));
     }
 
     @GetMapping("/{hotelId}/detail/{roomId}")
@@ -69,4 +69,8 @@ public class HotelController {
         return ResponseEntity.ok(new ApiResponse("Delete hotel and all its rooms successfully!", null));
     }
 
+    @GetMapping("/{hotelId}/detail-es")
+    public ResponseEntity<ApiResponse> getHotelDetailEs(@PathVariable String hotelId) {
+        return ResponseEntity.ok(new ApiResponse("Hotel Detail", hotelService.findById(hotelId)));
+    }
 }

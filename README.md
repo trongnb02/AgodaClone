@@ -1,6 +1,9 @@
 # AgodaClone
 Agoda Clone Microservices
 
+## Service Architecture Diagram
+![service-architecture](./Diagram.jpg)
+
 ## Auth Service
 
 Get JWT token by credential:

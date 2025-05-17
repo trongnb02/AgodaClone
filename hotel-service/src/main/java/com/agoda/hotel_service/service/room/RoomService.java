@@ -1,7 +1,9 @@
 package com.agoda.hotel_service.service.room;
 
+import com.agoda.hotel_service.dto.request.CreateRoomRequest;
 import com.agoda.hotel_service.dto.response.RoomDto;
 import com.agoda.hotel_service.exception.ResourceNotFoundException;
+import com.agoda.hotel_service.model.Hotel;
 import com.agoda.hotel_service.model.Room;
 import com.agoda.hotel_service.repository.HotelRepository;
 import com.agoda.hotel_service.repository.RoomRepository;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class RoomService implements IRoomService{
     private final RoomRepository roomRepository;
-    private final HotelRepository hotelRepository;
 
     public Room save(Room room) {
         return roomRepository.save(room);
@@ -26,13 +27,15 @@ public class RoomService implements IRoomService{
                 .orElseThrow(()-> new ResourceNotFoundException("Room not found!"));
     }
 
-    public Room createRoom(RoomDto room) {
+    public Room createRoom(CreateRoomRequest request, Hotel hotel) {
         return roomRepository.save(Room.builder()
-                .roomType(room.getRoomType())
-                .price(room.getPrice())
-                .capacity(room.getCapacity())
-                .availability(room.getAvailability())
-                .hotel(null)
+                .description(request.getDescription())
+                .price(request.getPrice())
+                .capacity(request.getCapacity())
+                .availability(request.getAvailability())
+                .amenities(request.getAmenities())
+                .bedType(request.getBedType())
+                .hotel(hotel)
                 .build()
         );
     }

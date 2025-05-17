@@ -34,6 +34,10 @@ spring:
           uri: http://localhost:8894
           predicates:
             - Path=/api/v1/notifications/**
+        - id: search-service
+          uri: http://localhost:8895
+          predicates:
+            - Path=/api/v1/search/**
 #management:
 #  tracing:
 #    sampling:

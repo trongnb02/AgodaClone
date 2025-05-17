@@ -64,7 +64,6 @@ public class BookingConsumer {
                 bookingEvent.getBooking().getHotelDto().getName(),
                 bookingEvent.getBooking().getHotelDto().getId(),
                 bookingEvent.getBooking().getHotelDto().getAddress(),
-                bookingEvent.getBooking().getRoomDto().getRoomType(),
                 bookingEvent.getBooking().getRoomDto().getId()
         );
     }

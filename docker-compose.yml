@@ -1,12 +1,14 @@
 services:
   mysql:
     container_name: mysql
-    image: mysql:9.2.0
+    image: mysql:8.2
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_DATABASE: agodaclone
-    volumes:
-      - mysql:/var/lib/mysql
+    command: >
+      --server-id=1
+      --log-bin=mysql-bin
+      --binlog_format=ROW
     ports:
       - "3306:3306"
     networks:
@@ -88,6 +90,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_LISTENER_NAME: PLAINTEXT
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
@@ -128,6 +131,61 @@ services:
       - redis
     restart: unless-stopped
 
+  elasticsearch:
+    container_name: es-container
+    image: elasticsearch:8.6.2
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - node.name=es-container
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+    networks:
+      - es-net
+      - agoda-clone
+    ports:
+      - 9200:9200
+
+  kibana:
+    container_name: kb-container
+    image: kibana:8.6.2
+    environment:
+      - node.name=kb-container
+      - cluster.name=es-docker-cluster
+      - ELASTICSEARCH_HOSTS=http://es-container:9200
+    networks:
+      - es-net
+      - agoda-clone
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
+  cdc-debezium-connect:
+    image: debezium/connect:2.5
+    container_name: cdc-debezium-connect
+    depends_on:
+      - broker
+      - mysql
+    ports:
+      - "8083:8083"
+    environment:
+      BOOTSTRAP_SERVERS: broker:29092
+      GROUP_ID: connect-group
+      CONFIG_STORAGE_TOPIC: connect-configs
+      OFFSET_STORAGE_TOPIC: connect-offsets
+      STATUS_STORAGE_TOPIC: connect-status
+      ENABLE_DEBEZIUM_SCRIPTING: true
+    links:
+      - mysql
+      - broker
+    networks:
+      - kafka
+      - agoda-clone
+      - mysql
+
+
 networks:
   mysql:
     driver: bridge
@@ -141,6 +199,5 @@ networks:
     driver: bridge
   redis:
     driver: bridge
-
-volumes:
-  mysql:
+  es-net:
+    driver: bridge

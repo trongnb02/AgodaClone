@@ -1,0 +1,31 @@
+server:
+  port: 8895
+spring:
+  application:
+    name: search-service
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      group-id: connect-group-any
+      auto-offset-reset: earliest
+      properties:
+        partition:
+          assignment:
+            strategy: org.apache.kafka.clients.consumer.RangeAssignor
+        spring:
+          json:
+            trusted:
+              packages: "*"
+            add-type-info: false
+          deserializer:
+            value:
+              delegate:
+                class: org.springframework.kafka.support.serializer.JsonDeserializer
+    topic:
+      name: mysql-cdc-hotels-topic.agodaclone.hotels
+
+es:
+  client:
+    url: localhost:9200

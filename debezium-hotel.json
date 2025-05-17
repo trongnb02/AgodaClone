@@ -1,0 +1,16 @@
+{
+  "name": "hotel-connector",
+  "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+  "database.hostname": "mysql",
+  "database.port": "3306",
+  "database.user": "root",
+  "database.password": "",
+  "database.dbname": "agodaclone",
+  "database.server.id": "1",
+  "key.converter.schemas.enable": "false",
+  "value.converter.schemas.enable": "false",
+  "table.include.list": "agodaclone.hotels",
+  "topic.prefix": "mysql-cdc-hotels-topic",
+  "schema.history.internal.kafka.topic": "mysql-schema-history",
+  "schema.history.internal.kafka.bootstrap.servers": "broker:29092"
+}

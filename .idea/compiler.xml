@@ -11,6 +11,7 @@
         <module name="base-domains" />
         <module name="auth-service" />
         <module name="discovery" />
+        <module name="search-service" />
         <module name="booking-service" />
         <module name="user-service" />
         <module name="gateway" />
@@ -29,6 +30,7 @@
       <module name="gateway" options="-parameters" />
       <module name="hotel-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />
+      <module name="search-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

@@ -1,0 +1,5 @@
+package com.agoda.hotel_service.model.enums;
+
+public enum BedType {
+    QUEEN, KING, DOUBLE, SINGLE, BUNK, STUDIO, TWIN, TRIPLE
+}

@@ -7,11 +7,11 @@ import com.agoda.hotel_service.model.Hotel;
 import com.agoda.hotel_service.model.Room;
 import com.agoda.hotel_service.repository.HotelRepository;
 import com.agoda.hotel_service.repository.RoomRepository;
+import com.agoda.hotel_service.service.room.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +20,7 @@ import java.util.Set;
 public class HotelService implements IHotelService{
     private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
+    private final IRoomService roomService;
 
     public Hotel save(Hotel hotel) {
         return hotelRepository.save(hotel);
@@ -33,23 +34,34 @@ public class HotelService implements IHotelService{
 
     @Transactional
     public Hotel createHotel(CreateHotelRequest request) {
-        Hotel hotel = Hotel.builder()
-                .name(request.getName())
-                .address(request.getAddress())
-                .city(request.getCity())
-                .phone(request.getPhone())
-                .vendorId(request.getVendorId())
-                .rooms(new HashSet<>())
-                .build();
+        Hotel hotel = new Hotel(request.getName(),
+                request.getDescription(),
+                request.getAddress(),
+                request.getCity(),
+                request.getPhone(),
+                request.getVendorId(),
+                request.getPropertyType(),
+                request.getFacilities());
+
+        if (request.getEarliestCheckInTime() != null) {
+            hotel.setEarliestCheckInTime(request.getEarliestCheckInTime());
+        }
+        if (request.getLatestCheckInTime() != null) {
+            hotel.setLatestCheckInTime(request.getLatestCheckInTime());
+        }
+        if (request.getStandardCheckOutTime() != null) {
+            hotel.setStandardCheckOutTime(request.getStandardCheckOutTime());
+        }
+        if (request.getLatestCheckOutTime() != null) {
+            hotel.setLatestCheckOutTime(request.getLatestCheckOutTime());
+        }
+        if (request.getLateCheckoutFee() != null) {
+            hotel.setLateCheckoutFee(request.getLateCheckoutFee());
+        }
 
         if (request.getRooms() != null && !request.getRooms().isEmpty()) {
             request.getRooms().forEach( (room) -> {
-                    Room newRoom = Room.builder()
-                            .roomType(room.getRoomType())
-                            .price(room.getPrice())
-                            .capacity(room.getCapacity())
-                            .availability(room.getAvailability())
-                            .build();
+                    Room newRoom = roomService.createRoom(room, hotel);
                     hotel.addRoom(newRoom);
                     roomRepository.save(newRoom);
 
@@ -79,15 +91,9 @@ public class HotelService implements IHotelService{
     }
 
     @Transactional
-    public Hotel updateHotel(String hotelId, CreateRoomRequest request) {
+    public Hotel addRoomToHotel(String hotelId, CreateRoomRequest request) {
         Hotel hotel = findById(hotelId);
-
-        Room newRoom = Room.builder()
-                .roomType(request.getRoomType())
-                .price(request.getPrice())
-                .capacity(request.getCapacity())
-                .availability(request.getAvailability())
-                .build();
+        Room newRoom = roomService.createRoom(request, hotel);
         hotel.addRoom(newRoom);
         roomRepository.save(newRoom);
         return hotelRepository.save(hotel);

@@ -1,0 +1,2 @@
+package com.agoda.search_service.dto.response;public class RoomDetail {
+}

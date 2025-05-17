@@ -20,4 +20,8 @@ public class ErrorCode {
     public static final String INTERNAL_SERVER_ERROR_HOTEL_SERVICE = "HOTEL-SERVICE-1000";
     public static final String HOTEL_SERVICE_RESOURCE_NOT_FOUND = "HOTEL-SERVICE-1001";
     public static final String HOTEL_SERVICE_ALREADY_EXISTS = "HOTEL-SERVICE-1002";
+
+    public static final String INTERNAL_SERVER_ERROR_SEARCH_SERVICE = "SEARCH-SERVICE-1000";
+    public static final String SEARCH_SERVICE_RESOURCE_NOT_FOUND = "SEARCH-SERVICE-1001";
+    public static final String SEARCH_SERVICE_ALREADY_EXISTS = "SEARCH-SERVICE-1002";
 }
